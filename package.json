@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "test": "mocha server/**/*.test.js"
+    "test": "mocha server/**/*.test.js --exit"
   },
   "repository": {
     "type": "git",

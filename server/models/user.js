@@ -1,4 +1,6 @@
-var User = mongoose.model('User', {
+var mongoose = require('mongoose');
+
+var User = new mongoose.model('User', {
   email: {
     type: String,
     required: true,

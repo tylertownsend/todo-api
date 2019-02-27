@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "test": "mocha server/**/*.test.js --exit"
+    "test": "nyc mocha server/**/*.test.js --exit"
   },
   "repository": {
     "type": "git",
@@ -21,7 +20,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongodb": "^3.1.13",
-    "mongoose": "^5.4.15"
+    "mongoose": "^5.4.15",
+    "nyc": "^13.3.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",

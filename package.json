@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coverage": "test"
+    "coverage": "test",
     "test": "nyc mocha server/**/*.test.js --exit"
   },
   "repository": {

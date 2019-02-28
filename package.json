@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coveralls": "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "test": "mocha server/**/*.test.js --exit"
   },
   "repository": {

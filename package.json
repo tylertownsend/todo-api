@@ -22,7 +22,8 @@
     "express": "^4.16.4",
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.15",
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",

@@ -1,8 +1,8 @@
 const expect = require('expect');
 const request = require('supertest');
 
-const {app} = require('./../server');
-const {Todo} = require('./../models/todo');
+const app = require('./../server');
+const Todo = require('./../models/todo');
 
 const todos = [{
   text: 'First test todo'
@@ -18,27 +18,17 @@ beforeEach((done) => {
 
 describe('POST /todos', ()=> {
 
-  it('should create a new todo', (done) => {
-    var text = 'Dwayne - the Rock - Johnson'; 
-
-    request(app)
+  it('should create a new todo', async () => {
+    const text = 'Dwayne - the Rock - Johnson'; 
+    const response = await request(app)
       .post('/todos')
       .send({text})
       .expect(201)
-      .expect((res) => {
-        expect(res.body.text).toBe(text);
-      })
-      .end((err, res) => {
-        if(err) {
-          return done(err);
-        }
-
-        Todo.find({text}).then((todos) => {
-          expect(todos.length).toBe(1);
-          expect(todos[0].text).toBe(text);
-          done();
-        }).catch((e) => done(e));
-      });
+    
+    const task = await Todo.findById(response.body._id);
+    expect(task).not.toBeNull()
+    expect(task.text).toBe(text);
+    expect(task.completed).toEqual(false);
   });
 
   it('should not create todo with invalid body data', (done) => {

@@ -2,59 +2,59 @@ const expect = require('expect');
 const request = require('supertest');
 
 const app = require('../src/app');
-const Todo = require('../src/models/todo');
+const Task = require('../src/models/task');
 
-const todos = [{
-  text: 'First test todo'
+const tasks = [{
+  text: 'First test task'
 }, {
-  text: 'Second test todo'
+  text: 'Second test task'
 }];
 
 beforeEach((done) => {
-  Todo.deleteMany({}).then(() => {
-    return Todo.insertMany(todos);
+  Task.deleteMany({}).then(() => {
+    return Task.insertMany(tasks);
   }).then(() => done());
 });
 
-describe('POST /todos', ()=> {
+describe('POST /tasks', ()=> {
 
-  it('should create a new todo', async () => {
-    const text = 'Dwayne - the Rock - Johnson'; 
+  it('should create a new task', async () => {
+   const text = 'Dwayne - the Rock - Johnson'; 
     const response = await request(app)
-      .post('/todos')
+      .post('/tasks')
       .send({text})
       .expect(201)
     
-    const task = await Todo.findById(response.body._id);
+    const task = await Task.findById(response.body._id);
     expect(task).not.toBeNull()
     expect(task.text).toBe(text);
     expect(task.completed).toEqual(false);
   });
 
-  it('should not create todo with invalid body data', (done) => {
+  it('should not create task with invalid body data', (done) => {
     request(app)
-      .post('/todos')
+      .post('/tasks')
       .send({})
       .expect(400)
       .end((err, res) => {
         if (err) {
           return done(err);
         }
-        Todo.find().then((todos) => {
-          expect(todos.length).toBe(2);
+        Task.find().then((tasks) => {
+          expect(tasks.length).toBe(2);
           done();
         }).catch((e) => done(e));
       })
   });
 });
 
-describe('GET /todos', () => {
-  it('should get all todos', (done) => {
+describe('GET /tasks', () => {
+  it('should get all tasks', (done) => {
     request(app)
-      .get('/todos')
+      .get('/tasks')
       .expect(200)
       .expect((res) => {
-        expect(res.body.todos.length).toBe(2);
+        expect(res.body.tasks.length).toBe(2);
       })
       .end(done);
   });

@@ -1,32 +1,32 @@
 const express = require('express');
 
-const Todo = require('../models/todo');
+const Task = require('../models/task');
 
 const taskRouter = new express.Router();
 
-taskRouter.post('/todos', async (req, res) => {
-  const todo = new Todo(req.body);
+taskRouter.post('/tasks', async (req, res) => {
+  const task = new Task(req.body);
   try {
-    const doc = await todo.save();
+    const doc = await task.save();
     res.status(201).send(doc);
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-taskRouter.get('/todos', async (req, res)=> {
+taskRouter.get('/tasks', async (req, res)=> {
   try {
-    const todos = await Todo.find({});
-    res.send({todos});
+    const tasks = await Task.find({});
+    res.send({tasks});
   } catch(e) {
     res.status(500).send(e);
   }
 });
 
-taskRouter.get('/todos/:id', async (req, res) => {
+taskRouter.get('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
   try {
-    const task = await Todo.findById(_id);
+    const task = await Task.findById(_id);
     if (!task) {
       return res.status(404).send();
     }
@@ -36,7 +36,7 @@ taskRouter.get('/todos/:id', async (req, res) => {
   }
 });
 
-taskRouter.patch('/todos/:id', async (req, res) => {
+taskRouter.patch('/tasks/:id', async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['description', 'completed'];
   const isValidOperation = updates.every((update) => {
@@ -63,9 +63,9 @@ taskRouter.patch('/todos/:id', async (req, res) => {
   }
 });
 
-taskRouter.delete('/todos/:id', async (req, res) =>{
+taskRouter.delete('/tasks/:id', async (req, res) =>{
   try {
-    const task = await Todo.findByIdAndDelete(req.params.id);
+    const task = await Task.findByIdAndDelete(req.params.id);
 
     if (!task) {
       res.status(404).send();

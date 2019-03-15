@@ -1,3 +1,4 @@
+const expect = require('expect');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -21,19 +22,33 @@ beforeEach(async () => {
 });
 describe('POST /users', () => {
   it('Should signup a new user', async () => {
-    await request(app) .post('/users')
+    const response = await request(app) .post('/users')
       .send({name: 'Tyler',
             email: 'tyler@example.com',
             password: 'MyPass777!'
       }).expect(201);
+    
+      const user = await User.findById(response.body.user._id); 
+      expect(user).not.toBeNull();
+
+      expect(response.body).toMatchObject({
+        user: {
+          name: 'Tyler',
+          email: 'tyler@example.com'
+        },
+        token: user.tokens[0].token
+      });
+      expect(user.password).not.toBe('MyPass777!');
   });
 
   it('Should login existing user', async () => {
-    await request(app).post('/users/login')
+    const response = await request(app).post('/users/login')
       .send({
         email: userOne.email,
         password: userOne.password
       }).expect(200);
+    const user = await User.findById(userOneId);
+    expect(response.body.token).toBe(user.tokens[1].token);
   });
 
   it('Should not login nonexistent user', async() => {
@@ -93,6 +108,9 @@ describe('DELETE /users', () => {
       .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
       .send()
       .expect(200);
+    
+    const user = await User.findById(userOneId);
+    expect(user).toBe(null);
   });
 
   it('Should not delete account for unauthenticated user', async () => {
